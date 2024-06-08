@@ -14,6 +14,7 @@ class StocksController extends Controller
 
         $flag = true;
         $i = 0;
+        $timeInMinute = time() + 60; //60 seconds
         while ($flag) {
             $i++;
             $response = Http::get("http://89.108.115.241:6969/api/stocks?dateFrom=$today&dateTo=2029-05-31&page=$i&key=" . env("KEY") . "&limit=500");
@@ -22,6 +23,11 @@ class StocksController extends Controller
                 $i = 0;
                 $flag = false;
                 continue;
+            }
+
+            if(time()>$timeInMinute){
+                sleep(5);
+                $timeInMinute = time() + 60; //60 seconds
             }
 
             foreach ($data as $key => $value) {

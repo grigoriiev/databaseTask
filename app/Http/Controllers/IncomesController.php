@@ -12,6 +12,7 @@ class IncomesController extends Controller
         set_time_limit(0);
         $flag = true;
         $i = 0;
+        $timeInMinute = time() + 60; //60 seconds
         while ($flag) {
             $i++;
             $response = Http::get("http://89.108.115.241:6969/api/incomes?dateFrom=2020-05-31&dateTo=2029-05-31&page=$i&key=" . env("KEY") . "&limit=500");
@@ -22,6 +23,11 @@ class IncomesController extends Controller
                 continue;
             }
 
+
+            if(time()>$timeInMinute){
+                sleep(5);
+                $timeInMinute = time() + 60; //60 seconds
+            }
 
             foreach ($data as $key => $value) {
                 DB::table('incomes')->insert([
